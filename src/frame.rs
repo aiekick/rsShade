@@ -1,10 +1,15 @@
+extern crate imgui;
 extern crate glfw;
+extern crate notify;
 
-use std::ffi::CString;
+use notify::{Watcher, RecursiveMode, RawEvent, raw_watcher, RecommendedWatcher};
 use glfw::{Glfw, Action, Context, Key, MouseButton};
+use std::sync::mpsc::{channel, Receiver, Sender};
 use std::mem::{size_of, size_of_val};
 use std::time::Instant;
+use std::ffi::CString;
 use gl33::*;
+use imgui::Context as ImContext;
 
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
@@ -288,7 +293,7 @@ impl MainFrame
 {
     pub fn new() -> Self
     {
-        glfw::WindowHint::ContextVersion(3, 3); // opengl 3.2
+        glfw::WindowHint::ContextVersion(3, 3);
         Self {
             m_glfw: glfw::init(glfw::FAIL_ON_ERRORS).unwrap(),
             m_size_uniform_loc: 0,
@@ -310,6 +315,8 @@ impl MainFrame
         window.set_cursor_pos_polling(true);
 
         let gl = self.prepare();
+
+        let mut imgui = ImContext::create();
 
         let mut uniform_size = (0f32, 0f32);
         let mut uniform_time = 0f32;

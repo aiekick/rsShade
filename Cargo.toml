@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 glfw = "0.44.0"
 gl33 = "0.2.1"
+notify = "4.0.17"
+imgui = "0.8.2"
+imgui-opengl-renderer = "0.11.1"
